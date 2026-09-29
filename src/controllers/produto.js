@@ -14,27 +14,37 @@ const listar = (req, res) => {
 const alterar = (req, res) => {
     const id = Number(req.params.id)
     const dados = req.body
+    let indice = -1
     produtos.forEach((p, i) => {
         if (p.id == id) {
-            dados.id = id
-            produtos[i] = dados
-            res.status(202).json(dados)
+            indice = i
         }
     })
-    res.status(404).json("Id não encontrado")
+    if (indice != -1) {
+        dados.id = id
+        produtos[indice] = dados
+        res.status(202).json(dados)
+    } else {
+        res.status(404).json("Id não encontrado")
+    }
 }
 
 const excluir = (req, res) => {
     const id = Number(req.params.id)
+    let indice = -1
     produtos.forEach((p, i) => {
         if (p.id == id) {
-            produtos[i].status = "Registro excluído"
-            const excluido = produtos[i]
-            produtos.splice(i, 1)
-            res.json(excluido)
+            indice = i
         }
     })
-    res.status(404).json("Id não encontrado")
+    if (indice != -1) {
+        produtos[indice].status = "Registro excluído"
+        const excluido = produtos[indice]
+        produtos.splice(indice, 1)
+        res.json(excluido)
+    } else {
+        res.status(404).json("Id não encontrado")
+    }
 }
 
 module.exports = {

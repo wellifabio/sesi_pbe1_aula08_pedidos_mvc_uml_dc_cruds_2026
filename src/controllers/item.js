@@ -15,8 +15,42 @@ const listar = (req, res) => {
     subotais()
     res.json(itens)
 }
-const alterar = (req, res) => { }
-const excluir = (req, res) => { }
+
+const alterar = (req, res) => {
+    const id = Number(req.params.id)
+    const dados = req.body
+    let indice = -1
+    itens.forEach((p, i) => {
+        if (p.id == id) {
+            indice = i
+        }
+    })
+    if (indice != -1) {
+        dados.id = id
+        itens[indice] = dados
+        res.status(202).json(dados)
+    } else {
+        res.status(404).json("Id não encontrado")
+    }
+}
+
+const excluir = (req, res) => {
+    const id = Number(req.params.id)
+    let indice = -1
+    itens.forEach((p, i) => {
+        if (p.id == id) {
+            indice = i
+        }
+    })
+    if (indice != -1) {
+        itens[indice].status = "Registro excluído"
+        const excluido = itens[indice]
+        itens.splice(indice, 1)
+        res.json(excluido)
+    } else {
+        res.status(404).json("Id não encontrado")
+    }
+}
 
 module.exports = {
     criar, listar, alterar, excluir
