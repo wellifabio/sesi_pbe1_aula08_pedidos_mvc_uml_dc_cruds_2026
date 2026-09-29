@@ -11,13 +11,25 @@ const rotaInicial = (req, res) => {
 }
 
 router.get('/', rotaInicial)
-router.get('/clientes', Cliente.listar)
-router.get('/pedidos', Pedido.listar)
-router.get('/itens', Item.listar)
-router.get('/produtos', Produto.listar)
+
 router.post('/clientes', Cliente.criar)
+router.get('/clientes', Cliente.listar)
+router.put('/clientes/:id', Cliente.alterar)
+router.delete('/clientes/:id', Cliente.excluir)
+
 router.post('/pedidos', Pedido.criar)
-router.post('/pedidos', Item.criar)
-router.post('/pedidos', Produto.criar)
+router.get('/pedidos', Pedido.listar)
+router.put('/pedidos/:id', Pedido.alterar)
+router.delete('/pedidos/:id', Pedido.excluir)
+
+router.post('/itens', Item.criar)
+router.get('/itens', Item.listar)
+router.put('/itens/:id', Item.alterar)
+router.delete('/itens/:id', Item.excluir)
+
+router.post('/produtos', Produto.criar)
+router.get('/produtos', Produto.listar)
+router.put('/produtos/:id', Produto.alterar)
+router.delete('/produtos/:id', Produto.excluir)
 
 module.exports = router
