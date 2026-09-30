@@ -1,5 +1,6 @@
 const clientes = require("../../dados/clientes.json")
 
+//CRUDS
 const criar = (req, res) => {
     const dados = req.body
     dados.id = Number(clientes[clientes.length - 1].id) + 1 //autoIncrement
@@ -9,6 +10,18 @@ const criar = (req, res) => {
 
 const listar = (req, res) => {
     res.json(clientes)
+}
+
+const buscarPorId = (req, res) => {
+    const filtrado = clientes.find(c => c.id == req.params.id)
+    if (filtrado) res.json(filtrado)
+    else res.status(404).json("Id não encontrado")
+}
+
+const buscarPorNome = (req, res) => {
+    const filtrados = clientes.filter(c => c.nome.toUpperCase().includes(req.params.nome.toUpperCase()))
+    if (filtrados.length > 0) res.json(filtrados)
+    else res.status(404).json("Nome não encontrado")
 }
 
 const alterar = (req, res) => {
@@ -46,6 +59,7 @@ const excluir = (req, res) => {
         res.status(404).json("Id não encontrado")
     }
 }
+
 module.exports = {
-    criar, listar, alterar, excluir
+    criar, listar, alterar, excluir, buscarPorId, buscarPorNome
 }

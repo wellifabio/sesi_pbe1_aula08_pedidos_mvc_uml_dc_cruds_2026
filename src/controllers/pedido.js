@@ -2,25 +2,31 @@ const pedidos = require("../../dados/pedidos.json")
 const clientes = require("../../dados/clientes.json")
 const itens = require("../../dados/itens.json")
 
-function comporPedidos() {
+//Composição
+function comporCliente() {
     pedidos.forEach(p => {
         p.cliente = clientes.find(c => c.id == p.id)
     })
 }
 
+//Agregação
 function agregarItens() {
     pedidos.forEach(p => {
-        const itensPedido = itens.filter(item => item.pedido_id == p.id)
-        let total = 0
-        itensPedido.forEach(item => {
-            item.subtotal = item.quantidade * item.preco
-            total += item.subtotal
-        })
-        p.itens = itensPedido
-        p.total = total
+        p.itens = itens.filter(item => item.pedido_id == p.id)
     })
 }
 
+function totais() {
+    pedidos.forEach(p => {
+        p.total = 0
+        p.itens.forEach(item=>{
+            item.subtotal = item.quantidade * item.preco
+            p.total += item.subtotal
+        })
+    })
+}
+
+//CRUDS
 const criar = (req, res) => {
     const dados = req.body
     dados.id = Number(pedidos[pedidos.length - 1].id) + 1 //autoIncrement
@@ -29,9 +35,19 @@ const criar = (req, res) => {
 }
 
 const listar = (req, res) => {
-    comporPedidos()
+    comporCliente()
     agregarItens()
+    totais()
     res.json(pedidos)
+}
+
+const buscarPorId = (req, res) => {
+    comporCliente()
+    agregarItens()
+    totais()
+    const filtrado = pedidos.find(p => p.id == req.params.id)
+    if (filtrado) res.json(filtrado)
+    else res.status(404).json("Id não encontrado")
 }
 
 const alterar = (req, res) => {
@@ -71,5 +87,5 @@ const excluir = (req, res) => {
 }
 
 module.exports = {
-    criar, listar, alterar, excluir
+    criar, listar, alterar, excluir, buscarPorId
 }

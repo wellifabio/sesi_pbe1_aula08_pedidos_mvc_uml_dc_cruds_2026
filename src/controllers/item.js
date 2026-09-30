@@ -1,17 +1,30 @@
 const itens = require("../../dados/itens.json")
+const produtos = require("../../dados/produtos.json")
 
+//Composição
+function comporProduto() {
+    itens.forEach(item => {
+        item.produto = produtos.find(p => p.id == item.produto_id)
+    })
+}
+
+//Calcular subtotais
 function subotais() {
     itens.forEach(item => {
         item.subtotal = item.quantidade * item.preco
     })
 }
+
+//CRUDs
 const criar = (req, res) => {
     const dados = req.body
     dados.id = Number(itens[itens.length - 1].id) + 1 //autoIncrement
     itens.push(dados)
     res.status(201).json(dados)
 }
+
 const listar = (req, res) => {
+    comporProduto()
     subotais()
     res.json(itens)
 }
