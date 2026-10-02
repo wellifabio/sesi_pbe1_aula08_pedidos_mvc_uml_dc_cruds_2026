@@ -29,6 +29,28 @@ const alterar = (req, res) => {
     }
 }
 
+const alterarParcial = (req, res) => {
+    const id = Number(req.params.id)
+    const dados = req.body
+    const chaves = Object.keys(req.body)
+    let indice = -1
+    produtos.forEach((p, i) => {
+        if (p.id == id) {
+            indice = i
+        }
+    })
+    if (indice != -1) {
+        dados.id = id
+        chaves.forEach(c => {
+            produtos[indice][c] = dados[c]
+        })
+        res.status(202).json(produtos[indice])
+    } else {
+        res.status(404).json("Id não encontrado")
+    }
+}
+
+
 const excluir = (req, res) => {
     const id = Number(req.params.id)
     let indice = -1
@@ -48,5 +70,5 @@ const excluir = (req, res) => {
 }
 
 module.exports = {
-    criar, listar, alterar, excluir
+    criar, listar, alterar, excluir, alterarParcial
 }
